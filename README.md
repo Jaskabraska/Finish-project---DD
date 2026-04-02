@@ -28,6 +28,7 @@ A data-driven approach to demand forecasting and inventory decisions for a multi
 | 13 | Global ML model (XGBoost) | XGBoost regressor trained on all store–product series with rich feature set |
 | 14 | Risk & inventory strategy (per store) | z-score safety-stock simulation for all 4 models, per store |
 | 15 | Evaluation & comparison | Forecast accuracy + business-impact metrics per store, weekly profit trends, profit diff vs baseline |
+| 17 | Capacity-constrained allocation | Fixed-capacity greedy optimisation: how many units of each product to prepare per store |
 
 ## Four-model comparison
 
@@ -51,6 +52,18 @@ For each model, the notebook simulates stocking decisions at four z-score risk l
 - `stockout = max(0, actual − stock)`
 
 Results are shown per store: profit pivot by model and z-score, best z-score per model, weekly profit trends, and overall 6-week summary with profit difference vs baseline.
+
+## Capacity-constrained allocation (Section 17)
+
+Given a fixed daily production capacity *C* per store (set to the store's average daily demand from training), the notebook solves for the profit-maximising product mix:
+
+- **Decision variable:** Q_p (integer units per product\_type\_sized)
+- **Constraint:** sum(Q_p) = C
+- **Method:** greedy marginal-profit ranking — each unit slot below predicted demand earns margin; slots beyond demand incur waste. Top-C slots are selected.
+- **Risk extension:** demand inflated via D\_tilde = D\_hat + k × σ with k ∈ {0, 0.5, 1.0}
+- **Scope:** one randomly selected test day, all product types, each store separately, all four models
+
+Outputs: per-store product allocation tables, profit/waste/stockout summaries, and the best (model, k) strategy per store.
 
 ## Economics assumptions
 
