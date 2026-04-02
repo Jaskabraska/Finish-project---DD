@@ -1,0 +1,7 @@
+store,category,daily_mean,daily_std,cv_pct,test_weekday_mean,test_weekend_mean,model_daily_mean
+Astoria,drinks,493.54,74.4,15.1,481.96,522.5,518.4
+Astoria,food_merch,59.23,15.62,26.4,60.32,56.5,71.56
+Hell's Kitchen,drinks,485.86,87.94,18.1,489.16,477.6,604.98
+Hell's Kitchen,food_merch,61.94,16.69,26.9,63.44,58.2,66.4
+Lower Manhattan,drinks,500.14,79.6,15.9,497.04,507.9,508.47
+Lower Manhattan,food_merch,64.97,13.83,21.3,64.8,65.4,74.79
