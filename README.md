@@ -10,22 +10,24 @@ A data-driven approach to demand forecasting and inventory decisions for a multi
 - **Pre-enriched fields**:
   - `product_type_sized` — product type with size suffix (sm / rg / lg), 44 unique values
   - `COGS_product_type` — product-specific cost-of-goods-sold percentage (20 %, 30 %, or 40 %)
+- **Holiday calendar**: `us_ny_holidays_2023.csv` — 15 US federal + New York state holidays, used to derive `is_holiday` (binary flag) and `days_to_next_holiday` (integer distance) features
 
 ## Notebook files
 
-- `coffee_shop_inventory (1).ipynb` — editable notebook (source)
-- `coffee_shop_inventory (1).executed (1).ipynb` — fully executed output snapshot with all four models
+- `coffee_shop_inventory - final.ipynb` — main notebook (fully executed) with holiday-enriched feature pipeline
+- `coffee_shop_inventory (1).ipynb` — earlier editable notebook (source)
+- `coffee_shop_inventory (1).executed (1).ipynb` — earlier executed output snapshot
 
 ## Current notebook structure
 
 | Section | Title | Description |
 |---------|-------|-------------|
 | 1–8 | EDA, feature engineering, SARIMAX | Exploratory analysis, calendar features, aggregation, weekly SARIMAX forecasting |
-| 9 | Feature engineering & daily demand prep | Load CSV, aggregate to daily demand per store × product\_type\_sized |
+| 9 | Feature engineering & daily demand prep | Load CSV, aggregate to daily demand per store × product\_type\_sized, merge holiday calendar (`is_holiday`, `days_to_next_holiday`) |
 | 10 | Baseline model (recency-weighted average) | Exponentially decaying weights (λ tuned for 14-day window), 6-week test split |
-| 11 | Pilot model (Linear Regression) | Global LR across all stores with calendar, lag, and rolling features |
+| 11 | Pilot model (Linear Regression) | Global LR across all stores with calendar, holiday, lag, and rolling features |
 | 12 | Classical per-series model (ETS / SARIMA) | Holt-Winters ETS per series, conditional SARIMA upgrade for strong/stable series |
-| 13 | Global ML model (XGBoost) | XGBoost regressor trained on all store–product series with rich feature set |
+| 13 | Global ML model (XGBoost) | XGBoost regressor trained on all store–product series with rich feature set including holiday features |
 | 14 | Risk & inventory strategy (per store) | z-score safety-stock simulation for all 4 models, per store |
 | 15 | Evaluation & comparison | Forecast accuracy + business-impact metrics per store, weekly profit trends, profit diff vs baseline |
 | 17 | Capacity-constrained allocation | Fixed-capacity greedy optimisation: how many units of each product to prepare per store |
