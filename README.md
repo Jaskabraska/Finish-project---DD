@@ -27,6 +27,7 @@ A data-driven approach to demand forecasting and inventory decisions for a multi
 | 12 | Risk and inventory simulation with waste/cost logic | Complete |
 | 13 | Evaluation and model comparison | Complete |
 | 14 | Pilot mode: one store, one model, full 6-week profit comparison vs baseline | Complete |
+| 16 | Fixed-capacity optimisation: integer allocation by product type under `sum(Q_p)=C` | Complete |
 
 ## Pilot mode (Section 14)
 
@@ -42,6 +43,23 @@ The latest pilot section is a simplified decision view:
   - prediction totals
   - actual totals
   - `profit_diff` (`model_profit - baseline_profit`)
+
+## Fixed-capacity optimisation (Section 16)
+
+Section 16 adds a dedicated allocation optimiser for production planning under a fixed capacity budget.
+
+- decision variable: `Q_p` (integer units per `product_type_sized`)
+- hard capacity constraint: `sum(Q_p) = C` for each store
+- objective: maximise expected profit from sold units minus production cost
+- scope: one random day from the final 6-week test set, run separately for each store
+- comparison axes:
+  - forecasting model (`baseline_pred`, `ma7_pred`, `ma14_pred`, `ets_pred`, `lr_pred`, `rf_pred`)
+  - risk loading with `D_tilde = D_hat + k * sigma` for multiple `k` values
+- outputs:
+  - optimal product mix (`Q_p`)
+  - expected profit
+  - expected waste and stockout
+  - best strategy per store and baseline-vs-advanced comparison
 
 ## Economics assumptions
 
